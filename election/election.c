@@ -23,7 +23,7 @@ typedef struct {
 /* billsType */
 typedef struct {
 	string30 billName;
-	datetype datePassed;
+	dateType datePassed;
 	} billsType;
 
 /*c.) we add another information in the candidate structure representing the rating, where the rating is further defined to
@@ -58,14 +58,14 @@ void getInput(candidateType *);
 //extra functions for getName
 int isALetter(char letter)
 	{
-	if (letter >= 'A' && <= 'Z')
+	if (letter >= 'A' && letter <= 'Z')
 		return 1;
 	else if (letter >= 'a' && letter <= 'z')
 		return 1;
 	return 0;
 	}
 
-int validName(String30 tempName)
+int validName(string30 tempName)
 	{
 	int i = 0;
 	while (i < 30)
@@ -79,10 +79,10 @@ int validName(String30 tempName)
 /*
 2. Create a function getName() that will get the name of the candidate.
 */
-void getName(candidateName *name)
+void getName(nameType *name)
 	{
-	candidateName FullName;
-	String30 tempName;
+	nameType FullName;
+	string30 tempName;
 	char MiddleInitial;
 	do
 		{
@@ -97,13 +97,14 @@ void getName(candidateName *name)
 			scanf("%c", MiddleInitial);
 			if (isALetter(MiddleInitial))
 				FullName.MI = MiddleInitial;
-			} while (!(isALetter(MiddleInitial))
+			} 
+		while (!(isALetter(MiddleInitial))
 					 do
 						 printf("Input last name: ");
 			scanf("%s", tempName);
 			if (validName(tempName))
 				strcpy(FullName.LName, tempName);
-	}while (!(validName(tempName)));
+	} while (!(validName(tempName)));
 }
 
 
@@ -176,9 +177,9 @@ void getInput(candidateType *pCand)
 	}
 
 //extra function for display date
-String30 getMonth(int num)
+string30 getMonth(int num)
 	{
-	String30 Month;
+	string30 Month;
 	switch (num)
 		{
 			case 1: strcpy(Month, "January"); break;
@@ -201,7 +202,6 @@ String30 getMonth(int num)
 /*
 5. Create a function displayDate() that will display the date information in the format of <Month in word form> <day>, <year>. For example: March 3, 2016
 */
-
 void displayDate(dateType date)
 	{
 	printf("%s %d, %d", getMonth(date.month), date.day, date.year);
@@ -213,13 +213,14 @@ this exercise. Whenever appropriate, call displayDate().
 */
 void
 display(candidateType *pCand) {
-	printf("Name: %s %c. %s\n", CandidateType.Name.LName, Name.MI, Name.FName);
-	printf("Birthday: %d/%d/%d\n", CandidateType.Birthday.month, Birthday.day, Birthday.year);
-	printf("Position: %s"\n, CandidateType.Position);
-	printf("Number of bills passed: %d\n", CandidateType.nBills);
-	for (i = 0; i < nBills; i++)
-		printf("Bill#%d : %s Date Implemented: %d\n", i + 1, CandidateType.billsPassed[i]);
-	printf
+	int i;
+	printf("Name: %s %c. %s\n", pCand->Name.LName, pCand->Name.MI, pCand->Name.FName);
+	printf("Birthday: %d/%d/%d\n", pCand->Birthday.month, pCand->Birthday.day, pCand->Birthday.year);
+	printf("Position: %s\n", pCand->Position);
+	printf("Number of bills passed: %d\n", pCand->nBills);
+	for (i = 0; i < pCand->nBills; i++)
+		printf("Bill#%d : %s Date Implemented: %d\n", i + 1, pCand->BillsPassed[i]);
+	//printf (printf what?)
 	}
 
 /*
@@ -237,9 +238,9 @@ will contain the updated values, i.e., the data in both structures will be swapp
 */
 void swap(candidateType * pCand1, candidateType * pCand2) {
 	candidateType tempCand;
-	*pCand = tempCand;
-	*pCand = *pCand2;
-	*pCand2 = tempCandl;
+	*pCand1 = tempCand;
+	*pCand1 = *pCand2;
+	*pCand2 = tempCand;
 	}
 
 /*
@@ -255,25 +256,26 @@ char MI; //Note: middle initial is one letter
 to the lowest rating. This function will not perform any display (i.e., no printf()). Part of the solution to this function is to call
 function swap(). Hint: You may use the algorithm to sort an array of floating point values that we discussed before.
 */
-void/*(?)*/sortByRating(arrCandidates[], numCandidates)//This is Potato's code
+void/*(?)*/ sortByRating(arrCandidates Candidates[], int numCandidates)//This is Potato's code
 	{
 	int i, indexG = 0;
 	float greatest;
 	for (i = 0; i < numCandidates; i++)
 		{
-		greatest = arrCandidates[indexG].survey;
-		if (greatest < arrCandidates[i].survey)
+		greatest = Candidates[indexG].Rating.survey;
+		if (greatest < Candidates[i].Rating.survey)
 			{
-			swap(arrCandidates[indexG], arrCandidates[i]);
+			swap(&Candidates[indexG], &Candidates[i]);
 			indexG = i;
 			}
 		}
 	}
+
 /*
 10. Create a function sortAlphabetical() that will rearrange the contents of the array of candidates based on the last name of the
 candidate. This function will not perform any display (i.e., no printf()). Part of the solution to this function is to call function swap().
 */
-void/*(?)*/ sort Alphabetical(arrCandidates[])
+void/*(?)*/ sortAlphabetical(arrCandidates Candidates[])
 	{
 
 	}
@@ -306,10 +308,10 @@ int main()
 	switch (opt)
 		{
 			case 0:
-				getInput(Candidates[nCand])
+				getInput(&Candidates[nCand]);
 					break;
 			case 1:
-				display
+				display(&Candidates[nCand]);
 					break;
 			case 2:
 				break;
