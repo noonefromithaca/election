@@ -81,7 +81,6 @@ int validName(string30 tempName)
 */
 void getName(nameType *name)
 	{
-	nameType FullName;
 	string30 tempName;
 	char MiddleInitial;
 	do
@@ -89,21 +88,21 @@ void getName(nameType *name)
 		printf("Input first name: ");
 		scanf("%s", tempName);
 		if (validName(tempName))
-			strcpy(FullName.FName, tempName);
+			strcpy(name->FName, tempName);
 		} while (!(validName(tempName)));
 		do
 			{
 			printf("Input middle initial: ");
 			scanf("%c", MiddleInitial);
 			if (isALetter(MiddleInitial))
-				FullName.MI = MiddleInitial;
+				name->MI = MiddleInitial;
 			} 
 		while (!(isALetter(MiddleInitial))
 					 do
 						 printf("Input last name: ");
 			scanf("%s", tempName);
 			if (validName(tempName))
-				strcpy(FullName.LName, tempName);
+				strcpy(name->LName, tempName);
 	} while (!(validName(tempName)));
 }
 
