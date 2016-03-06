@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #define MAX_CAND  20
 #define MAX_BILLS 10
 
@@ -22,7 +23,7 @@ typedef struct {
 /* b.) each bill passed is not a string, but a structure that contains the bill and the date it was passed */
 /* billsType */
 typedef struct {
-	string30 billName;
+	string50 billName;
 	dateType datePassed;
 } billsType;
 
@@ -52,9 +53,6 @@ typedef candidateType arrCandidates[MAX_CAND];
 
 /* FUNCTIONS BELOW, TYPDEFS ABOVE *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111111111111111111
 
-void display(candidateType);
-void getInput(candidateType *);
-
 //extra functions for getName
 int isALetter(char letter)
 {
@@ -62,61 +60,77 @@ int isALetter(char letter)
 		return 1;
 	else if (letter >= 'a' && letter <= 'z')
 		return 1;
+	else if (letter == ' ')
+		return 1;
 	return 0;
 }
 
 int validName(string30 tempName)
 {
-	int i = 0;
-	while (i < 30)
+	int i = 0, len;
+	len = strlen(tempName);
+	while (i < len)
 	{
 		if (!(isALetter(tempName[i])))
 			return 0;
+		i++;
 	}
 	return 1;
+}
+
+void
+clear(void)
+{
+	while (getchar() != '\n');
 }
 
 /*
 2. Create a function getName() that will get the name of the candidate.
 */
-void getName(nameType *name)
+void getName(nameType * name)
 {
 	string30 tempName;
 	char MiddleInitial;
 	do
 	{
 		printf("Input first name: ");
-		scanf("%s", tempName);
+		clear();
+		fgets(tempName, 31, stdin);
+		tempName[strlen(tempName) - 1] = '\0';
 		if (validName(tempName))
 			strcpy(name->FName, tempName);
+		else
+			printf("Invalid input.\n\n");
 	} while (!(validName(tempName)));
 	do
 	{
 		printf("Input middle initial: ");
-		scanf("%c", MiddleInitial);
+		scanf(" %c", &MiddleInitial);
 		if (isALetter(MiddleInitial))
 			name->MI = MiddleInitial;
-	} while (!(isALetter(MiddleInitial))
-			 do
-				 printf("Input last name: ");
-	scanf("%s", tempName);
-	if (validName(tempName))
-		strcpy(name->LName, tempName);
-} while (!(validName(tempName)));
+	} while (!(isALetter(MiddleInitial)));
+	do
+	{
+		printf("Input last name: ");
+		clear();
+		fgets(tempName, 31, stdin);
+		tempName[strlen(tempName) - 1] = '\0';
+		if (validName(tempName))
+			strcpy(name->LName, tempName);
+	} while (!(validName(tempName)));
 }
 
 
 /*
 3. Create a function getDate() that will get the date information.*/
-void getDate(dateType *date) //Sorry, I'm not good at getting dates
+void getDate(dateType * date) //Sorry, I'm not good at getting dates
 {
-	printf("Enter The Month: ");
-	scanf("%d", date.Month);
-	printf("Enter The Day: ");
-	scanf("%d", date.Day);
-	printf("Enter The Year: ");
-	scanf("%d", date.Year);
-
+	printf(" Enter The month: ");
+	scanf("%d", &(date->month));
+	printf(" Enter The day: ");
+	scanf("%d", &(date->day));
+	printf(" Enter The year: ");
+	scanf("%d", &(date->year));
 }
 
 /*
@@ -125,6 +139,18 @@ Also update this function to include getting input for the information that is n
 include the date the bill was passed (here you also need to call getDate()) and rating (so input for the percentage, the organization,
 and the date? with the date taken as user input using the function getDate() as well).
 */
+
+void getRating(surveyType * rating)
+{
+	printf("Enter the percentage of confidence/possible votes from a survey: ");
+	scanf("%f", &(rating->survey));
+	printf(" Enter the name of the organization who administered the survey: ");
+	clear();
+	fgets(rating->surOrg, 31, stdin);
+	rating->surOrg[strlen(rating->surOrg) - 1] = '\0';
+	printf(" Enter the date of the survey: \n");
+	getDate(&(rating->surDate));
+}
 
 /*typedef struct {
 nameType Name ;  //Not sure 'bout this nested structure thing. Please correct if wrong.
@@ -144,40 +170,44 @@ datetype datePassed;
 */
 void getInput(candidateType *pCand)
 {
-	string50 temp;
+	string30 temp;
 	getName(&(pCand->Name));
-	printf("Enter birthday: \n");
-	getDate(pCand.Birthday);
+	printf("\nEnter birthday below: \n");
+	getDate(&(pCand->Birthday));
 	printf("Enter position: ");
-	scanf("%s", pCand->Position);
-	scanf("%s", pCand->Party);
+	clear();
+	fgets(pCand->Position, 31, stdin);
+	pCand->Position[strlen(pCand->Position) - 1] = '\0';
+	printf("Enter party: ");
+	fgets(pCand->Party, 31, stdin);
+	pCand->Party[strlen(pCand->Party) - 1] = '\0';
+	getRating(&(pCand->Rating));
 
 	pCand->nBills = 0;
 
 	do
 	{
+		printf("Enter 'XXX' to end input.\n");
 		printf("Enter bill passed #%d: ", pCand->nBills + 1);
 		/*
 		fgets(Candidate.BillsPassed[Candidate.nBills], 51, stdin);
 		Candidate.BillsPassed[Candidate.nBills][strlen(Candidate.BillsPassed) - 1] = '\0';
 		*/
-
+		clear();
 		fgets(temp, 51, stdin);
 		temp[strlen(temp) - 1] = '\0';
 		if (strcmp(temp, "XXX") != 0)
 		{
-			strcpy(pCand->BillsPassed.billName[pCand->nBills], temp);
+			strcpy(pCand->BillsPassed[pCand->nBills].billName, temp);
+			getDate(&(pCand->BillsPassed[pCand->nBills].datePassed));
 			pCand->nBills++;
-			getDate(&(pCand->BillsPassed.datePassed));
 		}
-
 	} while (pCand->nBills < MAX_BILLS && strcmp(temp, "XXX") != 0);
 }
 
 //extra function for display date
-string30 getMonth(int num)
+void getMonth(int num, string30 Month)
 {
-	string30 Month;
 	switch (num)
 	{
 		case 1: strcpy(Month, "January"); break;
@@ -193,7 +223,6 @@ string30 getMonth(int num)
 		case 11: strcpy(Month, "November"); break;
 		case 12: strcpy(Month, "December"); break;
 	}
-	return Month;
 }
 
 
@@ -202,7 +231,9 @@ string30 getMonth(int num)
 */
 void displayDate(dateType date)
 {
-	printf("%s %d, %d", getMonth(date.month), date.day, date.year);
+	string30 strMonth;
+	getMonth(date.month, strMonth);
+	printf("%s %d, %d", strMonth, date.day, date.year);
 }
 
 /*
@@ -212,12 +243,25 @@ this exercise. Whenever appropriate, call displayDate().
 void
 display(candidateType pCand) {
 	int i;
-	printf("Name: %s %c. %s\n", pCand.Name.LName, pCand.Name.MI, pCand.Name.FName);
-	printf("Birthday: %d/%d/%d\n", pCand.Birthday.month, pCand.Birthday.day, pCand.Birthday.year);
-	printf("Position: %s\n", pCand.Position);
+	printf("\n");
+	printf("Name: %s %c. %s\n", pCand.Name.FName, pCand.Name.MI, pCand.Name.LName);
+	printf("Birthday: ");
+	displayDate(pCand.Birthday);
+	printf("\nPosition: %s\n", pCand.Position);
+	printf("Party: %s\n", pCand.Party);
+	printf("Rating: %.2f\n", pCand.Rating.survey);
+	printf("Date of survey: ");
+	displayDate(pCand.Rating.surDate);
+	printf("\nOrganization that held the survey: %s\n", pCand.Rating.surOrg);
 	printf("Number of bills passed: %d\n", pCand.nBills);
 	for (i = 0; i < pCand.nBills; i++)
-		printf("Bill#%d : %s Date Implemented: %d\n", i + 1, pCand.BillsPassed[i]);
+	{
+		printf("Bill #%d : %s\n Date implemented: ", i + 1, pCand.BillsPassed[i].billName);
+		displayDate(pCand.BillsPassed[i].datePassed);
+		printf("\n");
+	}
+	printf("\n");
+
 	//printf (printf what?)
 }
 
@@ -228,9 +272,16 @@ of the solution. Allow the user to press a key (of your choice, like Enter) to d
 */
 void displayByParty(arrCandidates Candidates, string30 party, int nCand) {
 	int i;
+	if (strcmp(party, "Independent") == 0)
+		printf("Independent candidates: \n");
+	else
+		printf("Candidates from the %s Party: \n", party);
 	for (i = 0; i < nCand; i++)
 		if (strcmp(Candidates[i].Party, party) == 0)
+		{
 			display(Candidates[i]);
+			printf("\n");
+		}
 }
 
 /*
@@ -239,7 +290,7 @@ will contain the updated values, i.e., the data in both structures will be swapp
 */
 void swap(candidateType * pCand1, candidateType * pCand2) {
 	candidateType tempCand;
-	*pCand1 = tempCand;
+	tempCand = *pCand1;
 	*pCand1 = *pCand2;
 	*pCand2 = tempCand;
 }
@@ -257,7 +308,7 @@ char MI; //Note: middle initial is one letter
 to the lowest rating. This function will not perform any display (i.e., no printf()). Part of the solution to this function is to call
 function swap(). Hint: You may use the algorithm to sort an array of floating point values that we discussed before.
 */
-void/*(?)*/ sortByRating(arrCandidates Candidates[], int numCandidates)//This is Potato's code
+void sortByRating(arrCandidates Candidates, int numCandidates)//This is Potato's code
 {
 	int i, indexG = 0;
 	float greatest;
@@ -276,9 +327,29 @@ void/*(?)*/ sortByRating(arrCandidates Candidates[], int numCandidates)//This is
 10. Create a function sortAlphabetical() that will rearrange the contents of the array of candidates based on the last name of the
 candidate. This function will not perform any display (i.e., no printf()). Part of the solution to this function is to call function swap().
 */
-void/*(?)*/ sortAlphabetical(arrCandidates Candidates[])
+void sortAlphabetical(arrCandidates Candidates, int numCandidates)
 {
-
+	int i, indexG = 0;
+	char greatest;
+	for (i = 0; i < numCandidates; i++)
+	{
+		greatest = Candidates[indexG].Name.LName[0];
+		if (Candidates[indexG].Name.LName[0] >= 'a' && Candidates[indexG].Name.LName[0] <= 'z')
+			greatest = greatest - 32;
+		if (Candidates[i].Name.LName[0] >= 'a' && Candidates[i].Name.LName[0] <= 'z')
+		{
+			if (greatest > Candidates[i].Name.LName[0] - 32)
+			{
+				swap(&Candidates[indexG], &Candidates[i]);
+				indexG = i;
+			}
+		} else
+			if (greatest > Candidates[i].Name.LName[0])
+			{
+				swap(&Candidates[indexG], &Candidates[i]);
+				indexG = i;
+			}
+	}
 }
 
 /*
@@ -299,35 +370,52 @@ int main()
 	int opt, nCand = 0, i;
 	arrCandidates Candidates;
 	string30 strInput;
-	printf("S ccelect an option: ");
-	printf("0 - Add Candidate Info");
-	printf("1 - Display All Candidates");
-	printf("2 - Display By Rating");
-	printf("3 - Display By Party");
-	printf("4 - Exit");
-	scanf("%d", &opt);
-
-	switch (opt)
+	do
 	{
-		case 0:
-			getInput(&Candidates[nCand]);
-			break;
-		case 1:
-			for (i = 0; i < nCand; i++)
-				display(Candidates[i]);
-			break;
-		case 2:
-			sortByRating(Candidates, nCand);
-			for (i = 0; i < nCand; i++)
-				display(Candidates[i]);
-			break;
-		case 3:
-			printf("Enter the name of the party: ");
-			scanf("%s", strInput);
-			displayByParty(Candidates, strInput, nCand);
-			break;
-		case 4:
-	}
+		printf("\n\nSelect an option: \n");
+		printf("0 - Add Candidate Info\n");
+		printf("1 - Display All Candidates\n");
+		printf("2 - Display By Rating\n");
+		printf("3 - Display By Party\n");
+		printf("4 - Exit\n");
+		scanf("%d", &opt);
+		printf("\n");
+		switch (opt)
+		{
+			case 0:
+				getInput(&Candidates[nCand]);
+				nCand++;
+				break;
+			case 1:
+				sortAlphabetical(Candidates, nCand);
+				printf("Press Enter to see the next candidate: \n");
+				for (i = 0; i < nCand; i++)
+				{
+					display(Candidates[i]);
+					getch();
+				}
+				break;
+			case 2:
+				sortByRating(Candidates, nCand);
+				printf("Press Enter to see the next candidate: \n");
+				for (i = 0; i < nCand; i++)
+				{
+					display(Candidates[i]);
+					getch();
+				}
+				break;
+			case 3:
+				printf("Enter the name of the party: \n");
+				clear();
+				fgets(strInput, 51, stdin);
+				strInput[strlen(strInput) - 1] = '\0';
+				displayByParty(Candidates, strInput, nCand);
+				break;
+			case 4:
+				break;
+		}
+
+	} while (opt != 4);
 
 	return 0;
 }
