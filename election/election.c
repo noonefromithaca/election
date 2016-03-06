@@ -273,12 +273,15 @@ of the solution. Allow the user to press a key (of your choice, like Enter) to d
 void displayByParty(arrCandidates Candidates, string30 party, int nCand) {
 	int i;
 	if (strcmp(party, "Independent") == 0)
-		printf("Independent candidates: ");
+		printf("Independent candidates: \n");
 	else
-		printf("Candidates from the %s Party: ", party);
+		printf("Candidates from the %s Party: \n", party);
 	for (i = 0; i < nCand; i++)
 		if (strcmp(Candidates[i].Party, party) == 0)
+		{
 			display(Candidates[i]);
+			printf("\n");
+		}
 }
 
 /*
@@ -331,11 +334,21 @@ void sortAlphabetical(arrCandidates Candidates, int numCandidates)
 	for (i = 0; i < numCandidates; i++)
 	{
 		greatest = Candidates[indexG].Name.LName[0];
-		if (greatest > Candidates[indexG].Name.LName[0])
+		if (Candidates[indexG].Name.LName[0] >= 'a' && Candidates[indexG].Name.LName[0] <= 'z')
+			greatest = greatest - 32;
+		if (Candidates[i].Name.LName[0] >= 'a' && Candidates[i].Name.LName[0] <= 'z')
 		{
-			swap(&Candidates[indexG], &Candidates[i]);
-			indexG = i;
-		}
+			if (greatest > Candidates[i].Name.LName[0] - 32)
+			{
+				swap(&Candidates[indexG], &Candidates[i]);
+				indexG = i;
+			}
+		} else
+			if (greatest > Candidates[i].Name.LName[0])
+			{
+				swap(&Candidates[indexG], &Candidates[i]);
+				indexG = i;
+			}
 	}
 }
 
@@ -384,8 +397,10 @@ int main()
 					display(Candidates[i]);
 				break;
 			case 3:
-				printf("Enter the name of the party: ");
-				scanf("%s", strInput);
+				printf("Enter the name of the party: \n");
+				clear();
+				fgets(strInput, 51, stdin);
+				strInput[strlen(strInput) - 1] = '\0';
 				displayByParty(Candidates, strInput, nCand);
 				break;
 			case 4:
