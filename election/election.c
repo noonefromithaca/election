@@ -23,7 +23,7 @@ typedef struct {
 /* b.) each bill passed is not a string, but a structure that contains the bill and the date it was passed */
 /* billsType */
 typedef struct {
-	string30 billName;
+	string50 billName;
 	dateType datePassed;
 } billsType;
 
@@ -52,9 +52,6 @@ typedef candidateType arrCandidates[MAX_CAND];
 
 
 /* FUNCTIONS BELOW, TYPDEFS ABOVE *//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11111111111111111111
-
-void display(candidateType);
-void getInput(candidateType *);
 
 //extra functions for getName
 int isALetter(char letter)
@@ -98,7 +95,7 @@ void getName(nameType * name)
 	{
 		printf("Input first name: ");
 		clear();
-		fgets(tempName, 51, stdin);
+		fgets(tempName, 31, stdin);
 		tempName[strlen(tempName) - 1] = '\0';
 		if (validName(tempName))
 			strcpy(name->FName, tempName);
@@ -116,7 +113,7 @@ void getName(nameType * name)
 	{
 		printf("Input last name: ");
 		clear();
-		fgets(tempName, 51, stdin);
+		fgets(tempName, 31, stdin);
 		tempName[strlen(tempName) - 1] = '\0';
 		if (validName(tempName))
 			strcpy(name->LName, tempName);
@@ -128,11 +125,11 @@ void getName(nameType * name)
 3. Create a function getDate() that will get the date information.*/
 void getDate(dateType * date) //Sorry, I'm not good at getting dates
 {
-	printf("Enter The month: ");
+	printf(" Enter The month: ");
 	scanf("%d", &(date->month));
-	printf("Enter The day: ");
+	printf(" Enter The day: ");
 	scanf("%d", &(date->day));
-	printf("Enter The year: ");
+	printf(" Enter The year: ");
 	scanf("%d", &(date->year));
 }
 
@@ -147,9 +144,11 @@ void getRating(surveyType * rating)
 {
 	printf("Enter the percentage of confidence/possible votes from a survey: ");
 	scanf("%f", &(rating->survey));
-	printf("Enter the name of the organization who administered the survey: ");
-	scanf("%s", rating->surOrg);
-	printf("Enter the date of the survey: \n");
+	printf(" Enter the name of the organization who administered the survey: ");
+	clear();
+	fgets(rating->surOrg, 31, stdin);
+	rating->surOrg[strlen(rating->surOrg) - 1] = '\0';
+	printf(" Enter the date of the survey: \n");
 	getDate(&(rating->surDate));
 }
 
@@ -171,17 +170,17 @@ datetype datePassed;
 */
 void getInput(candidateType *pCand)
 {
-	string50 temp;
+	string30 temp;
 	getName(&(pCand->Name));
 	printf("\nEnter birthday below: \n");
 	getDate(&(pCand->Birthday));
 	printf("Enter position: ");
 	clear();
-	fgets(pCand->Position, 51, stdin);
+	fgets(pCand->Position, 31, stdin);
+	pCand->Position[strlen(pCand->Position) - 1] = '\0';
 	printf("Enter party: ");
-	clear();
-	fgets(pCand->Party, 51, stdin);
-
+	fgets(pCand->Party, 31, stdin);
+	pCand->Party[strlen(pCand->Party) - 1] = '\0';
 	getRating(&(pCand->Rating));
 
 	pCand->nBills = 0;
@@ -200,8 +199,8 @@ void getInput(candidateType *pCand)
 		if (strcmp(temp, "XXX") != 0)
 		{
 			strcpy(pCand->BillsPassed[pCand->nBills].billName, temp);
-			pCand->nBills++;
 			getDate(&(pCand->BillsPassed[pCand->nBills].datePassed));
+			pCand->nBills++;
 		}
 	} while (pCand->nBills < MAX_BILLS && strcmp(temp, "XXX") != 0);
 }
@@ -246,17 +245,18 @@ display(candidateType pCand) {
 	int i;
 	printf("\n");
 	printf("Name: %s %c. %s\n", pCand.Name.FName, pCand.Name.MI, pCand.Name.LName);
-	printf("Birthday: %d/%d/%d\n", pCand.Birthday.month, pCand.Birthday.day, pCand.Birthday.year);
-	printf("Position: %s\n", pCand.Position);
+	printf("Birthday: ");
+	displayDate(pCand.Birthday);
+	printf("\nPosition: %s\n", pCand.Position);
 	printf("Party: %s\n", pCand.Party);
 	printf("Rating: %.2f\n", pCand.Rating.survey);
 	printf("Date of survey: ");
 	displayDate(pCand.Rating.surDate);
-	printf("Organization that held the survey: %s\n", pCand.Rating.surOrg);
+	printf("\nOrganization that held the survey: %s\n", pCand.Rating.surOrg);
 	printf("Number of bills passed: %d\n", pCand.nBills);
 	for (i = 0; i < pCand.nBills; i++)
 	{
-		printf("Bill #%d : %s\n Date Implemented: ", i + 1, pCand.BillsPassed[i].billName);
+		printf("Bill #%d : %s\n Date implemented: ", i + 1, pCand.BillsPassed[i].billName);
 		displayDate(pCand.BillsPassed[i].datePassed);
 		printf("\n");
 	}
