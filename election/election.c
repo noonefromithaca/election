@@ -379,7 +379,7 @@ int main()
 		printf("3 - Display By Party\n");
 		printf("4 - Exit\n");
 		scanf("%d", &opt);
-
+		printf("\n");
 		switch (opt)
 		{
 			case 0:
@@ -388,13 +388,21 @@ int main()
 				break;
 			case 1:
 				sortAlphabetical(Candidates, nCand);
+				printf("Press Enter to see the next candidate: \n");
 				for (i = 0; i < nCand; i++)
+				{
 					display(Candidates[i]);
+					getch();
+				}
 				break;
 			case 2:
 				sortByRating(Candidates, nCand);
+				printf("Press Enter to see the next candidate: \n");
 				for (i = 0; i < nCand; i++)
+				{
 					display(Candidates[i]);
+					getch();
+				}
 				break;
 			case 3:
 				printf("Enter the name of the party: \n");
