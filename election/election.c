@@ -33,11 +33,13 @@ typedef struct {
 } nameType;
 
 /* b.) each bill passed is not a string, but a structure that contains the bill and the date it was passed */
-/* struct for billsType */
-typedef struct {
+/* struct for pBillsType */
+typedef struct billsType{
 	string50 billName;
 	dateType datePassed;
-} billsType;
+	billsType *pNextBill;
+};
+typedef struct billsType pBillsType;
 
 /*c.) we add another information in the candidate structure representing the rating, where the rating is further defined to
 	contain the percentage of confidence/possible votes from a survey, the organization who administered the survey, and the
@@ -49,18 +51,19 @@ typedef struct {
 	dateType surDate;
 } surveyType;
 
-/* struct for candidateType */
-typedef struct {
+/* struct for pCandidateType */
+typedef struct candidateType{
 	nameType Name;
 	dateType Birthday;
 	string30 Position,
 		     Party;
 	surveyType Rating;
-	billsType BillsPassed[MAX_BILLS];
+	pBillsType BillsPassed;
 	int      nBills;
-} candidateType;
-
-typedef candidateType arrCandidates[MAX_CAND];
+	candidateType *pPrevCand;
+	candidateType *pNextCand;
+};
+typedef struct candidateType pCandidateType;
 
 /* Checks if the charparameter is a letter.
 
